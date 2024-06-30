@@ -25,7 +25,7 @@ router.param('model', (req, res, next) => {
 
 
 router.post('/signup', signup);
-router.post('/signin', basicAuth, signin);
+router.post('/signin', signin);
 router.get('/users', findUsers);
 router.get('/secret', secret);
 
@@ -41,7 +41,7 @@ async function signup(req, res, next) {
     let userRecord = await users.create(req.body);
     const output = {
       user: userRecord,
-      token: userRecord.token
+      token: userRecord.userId
     };
     res.status(201).json(output);
   } catch (e) {
@@ -50,17 +50,17 @@ async function signup(req, res, next) {
 }
 
 async function signin(req, res, next) {
-  const user = {
-    user: req.user,
-    token: req.user.token
-  };
+
+  const userID = req.body.userID;
+  const user = await users.model.findOne({ where: { userID } });
+  console.log(user);
+
   res.status(200).json(user);
 }
 
 async function findUsers(req, res, next) {
   const userRecords = await users.get();
-  const list = userRecords.map(user => user.username);
-  res.status(200).json(list);
+  res.status(200).json(userRecords);
 }
 
 async function secret(req, res, next) {
@@ -68,7 +68,6 @@ async function secret(req, res, next) {
 }
 
 async function handleGetAll(req, res) {
-  console.log('req.model', req.model);
   let allRecords = await req.model.get();
   res.status(200).json(allRecords);
 }

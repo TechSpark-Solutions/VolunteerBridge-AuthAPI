@@ -1,23 +1,17 @@
 'use strict';
 
 const base64 = require('base-64');
-const { users } = require('../../models');
+const { volunteerBridgeUser } = require('../../models/index.js');
 
 module.exports = async (req, res, next) => {
 
-  if (!req.headers.authorization) { return _authError(); }
- 
 
-
-  let basic = req.headers.authorization.split(' ').pop();
-
-
-  
-  let [user, pass] = base64.decode(basic).split(':');
+  const volunteerBridgeUserModel = volunteerBridgeUser.model;
 
 
   try {
-    req.user = await users.authenticateBasic(user, pass)
+    req.user = await volunteerBridgeUserModel.authenticateBasic(req.body)
+
     next();
   } catch (e) {
     _authError()
