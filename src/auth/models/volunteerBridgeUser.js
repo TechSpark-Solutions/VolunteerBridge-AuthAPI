@@ -36,16 +36,14 @@ const volunteerBridgeUserModel = (sequelize, DataTypes) => {
   });
 
   model.beforeCreate(async (volunteerBridgeUser) => {
-    console.log('volunteerBridgeUser', volunteerBridgeUser);
     let hashedPass = await bcrypt.hash(volunteerBridgeUser.userID, 10);
     volunteerBridgeUser.password = hashedPass;
   });
 
-  model.authenticateBasic = async function (username, password) {
+  model.authenticateBasic = async function (userID) {
     try {
-      const volunteerBridgeUser = await this.findOne({ where: { username } });
-      const valid = await bcrypt.compare(password, volunteerBridgeUser.password);
-      if (valid) { return volunteerBridgeUser; }
+      const volunteerBridgeUser = await this.findOne({ where: { userID } });
+      return volunteerBridgeUser;
     } catch(e) {
       console.error(e);
     }
