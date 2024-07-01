@@ -53,7 +53,8 @@ const volunteerBridgeUserModel = (sequelize, DataTypes) => {
   model.authenticateToken = async function (token) {
     try {
       const parsedToken = jwt.verify(token, SECRET);
-      const volunteerBridgeUser = this.findOne({where: { username: parsedToken.username } });
+      console.log('parsedToken', parsedToken);
+      const volunteerBridgeUser = this.findOne({where: { userID: parsedToken.userID } });
       if (volunteerBridgeUser) { return volunteerBridgeUser; }
       throw new Error("User Not Found");
     } catch (e) {
