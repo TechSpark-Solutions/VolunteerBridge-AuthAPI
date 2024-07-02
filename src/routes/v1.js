@@ -26,6 +26,7 @@ router.param('model', (req, res, next) => {
 
 router.post('/signup', signup);
 router.post('/signin', signin);
+router.put('/signin/:id', updateSignin);
 router.get('/users', findUsers);
 router.get('/secret', secret);
 
@@ -53,9 +54,23 @@ async function signin(req, res, next) {
 
   const userID = req.body.userID;
   const user = await users.model.findOne({ where: { userID } });
-  console.log(user);
 
   res.status(200).json(user);
+}
+
+async function updateSignin(req, res, next) {
+  
+
+  const userID = req.params.id;
+  // console.log('users', await users.model.findOne({ where: { userID } }));
+  // const user = await users.model.findOne({ where: { userID } });
+  // await user.update(req.body);
+
+  return users.model.findOne({ where: { userID } })
+  .then(record => record.update(req.body));
+  // res.status(200).json(user);
+  // return users.model.findOne({ where: { userID } })
+  // .then(record => record.update(req.body));
 }
 
 async function findUsers(req, res, next) {
