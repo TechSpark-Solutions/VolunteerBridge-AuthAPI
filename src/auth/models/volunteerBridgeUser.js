@@ -8,9 +8,14 @@ const SECRET = process.env.SECRET || 'secretstring';
 const volunteerBridgeUserModel = (sequelize, DataTypes) => {
   const model = sequelize.define('VolunteerBridgeUsers', {
     userID : { type: DataTypes.STRING, required: true, primaryKey: true, },
+    firstName: { type: DataTypes.STRING, required: true, unique: false },
+    lastName: { type: DataTypes.STRING, required: true, unique: false },
+    phone: { type: DataTypes.STRING, required: false, unique: false },
     email: { type: DataTypes.STRING, required: true, unique: false },
-    fullName: { type: DataTypes.JSONB, required: true },
-    role: { type: DataTypes.ENUM('user', 'writer', 'editor', 'admin'), required: true, defaultValue: 'user'},
+    age: { type: DataTypes.INTEGER, required: false, unique: false },
+    location: { type: DataTypes.STRING, required: false, unique: false },
+    bio: { type: DataTypes.TEXT, required: false, unique: false },
+    role: { type: DataTypes.ENUM('user', 'admin'), required: true, defaultValue: 'user'},
     token: {
       type: DataTypes.VIRTUAL,
       get() {
@@ -25,9 +30,7 @@ const volunteerBridgeUserModel = (sequelize, DataTypes) => {
       type: DataTypes.VIRTUAL,
       get() {
         const acl = {
-          user: ['read'],
-          writer: ['read', 'create'],
-          editor: ['read', 'create', 'update'],
+          user: ['read', 'create', 'update'],
           admin: ['read', 'create', 'update', 'delete']
         };
         return acl[this.role];
