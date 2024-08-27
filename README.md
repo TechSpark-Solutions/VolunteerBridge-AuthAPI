@@ -33,10 +33,6 @@ VolunteerBridge is a mobile application designed to help nonprofits find volunte
 - **Global Settings**: Screen for managing application settings.
 - **Sign-Up Modal**: Modal for signing up for events.
 
-## UML
-![alt text](<img/VolunteerBridge UML.png>)
-
-
 ## User Stories
 
 ### User Story 1: Nonprofit Profile Creation
